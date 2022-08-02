@@ -26,14 +26,15 @@ This is an in-depth guide on using this repo. This goes over getting the base re
 - [ ] NPM Scripts
 
   - `update` and `update:check`: Depends on `npm-check-updates` to force update packages to the latest available version. Can potentially break things.
+  - `update:url`: Update App URL and Whitelisted URLs to your Partner Dashboard from your `.env` file.
   - `dev`: Run in dev mode.
+  - `dev:no`: Run in dev mode without nodemon / auto refresh disabled.
   - `preserve`: For Vite.
   - `build`: Use Vite to build React into `dist/client`. If you don't run build, you cannot serve anything in dev / production modes.
   - `start`: Run in production mode. Please run `npm run build` before to compile client side.
   - `pretty`: Run prettier across the entire project. I personally like my code to be readable and using prettier CLI makes things easier. Refer to `.prettierrc` for configuration and `.prettierignore` to ignore files and folders.
   - `ngrok:auth`: Add in your auth token from [Ngrok](https://ngrok.com) to use the service.
   - `ngrok`: Ngrok is used to expose specific ports of your machine to the internet and serve over https. Running `npm run ngrok` auto generates a URL for you. The URL that's generated here goes in `SHOPIFY_APP_URL` and in the URL section of your app in Partner Dashboard.
-  - `update:url`: Update App URL and Whitelisted URLs to your Partner Dashboard from your `.env` file.
   - `shopify`: Run CLI 3.0 commands with `npm run shopify [command]`;
   - `s:e:create`: Create extension scaffolding using CLI 3.0. A new folder called `extensions` is created at root that uses the new folder structure.
   - `s:e:deploy`: Deploy extension(s) to Shopify.

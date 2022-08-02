@@ -1,16 +1,14 @@
-# Shopify Node.js x Express.js x React.js Boilerplate
+# Learning The Shopify Platform
 
-An embedded app starter template to get up and ready with Shopify app development with JavaScript. This is heavily influenced by the choices Shopify Engineering team made in building their [starter template](https://github.com/Shopify/shopify-app-template-node) to ensure smooth transition between templates.
+`Work In Progress` | The codebase I use to explore what's new on the Shopify platform and how things work.
 
-I've also included [notes](/NOTES.md) on this repo which goes over the repo on why certain choices were made.
+## Why I made this
 
-### Supporting Repositories:
+Every new change on the Shopify platform needs to be tested thoroughly before deploying to maintain app quality, since the apps you build as a developer are directly / indirectly responsible to put food on the table for our merchants. This is more of an explorer's repository where all possilbe webhooks, scopes, etc are registered to assess payload and see what's happening in the background because a lot of times we don't read that specific documentation set or it's not documented at all.
 
-- [Polaris Playground](https://github.com/kinngh/shopify-polaris-playground): A Shopify Polaris playground to build your interfaces and directly drop them in this repo, with the exception of `App.jsx`.
+This is how I explore the platform with docs open on the side. I'll be adding in more content to allow exploring the platform in a more meaningful way and all suggestions are welcome! Please use the discussions tab on the repo or message me on [Twitter](https://twitter.com/kinngh).
 
-### WIP:
-
-- [Learning how to build Shopify apps](https://github.com/kinngh/learning-shopify-app): A repo with webhooks, scopes, basic controllers and more setup so newcomers on the Shopify platform can learn what's called and what's required when planning out their build.
+If you're looking for just the boilerplate this repo uses, you can take a look at the [Shopify Node.js x Express.js x React.js Boilerplate](https://github.com/kinngh/shopify-node-express-mongodb-app).
 
 ## Tech Stack
 
@@ -21,25 +19,3 @@ I've also included [notes](/NOTES.md) on this repo which goes over the repo on w
 - Vite
 - Ngrok
 - Apollo/Client
-
-## Why I made this
-
-The Shopify CLI generates an amazing starter app but it still needs some more boilerplate code and customizations so I can jump on to building apps with a simple clone. This includes:
-
-- MongoDB based session and database management.
-- Monetization (recurring subscriptions) ready to go.
-- Webhooks isolated and setup.
-- React routing taken care of (I miss Next.js mostly because of routing and under the hood improvements).
-- Misc boilerplate code and templates to quickly setup inApp subscriptions, routes, webhooks and more.
-
-## Notes
-
-### Setup
-
-- Refer to [SETUP](/SETUP.md)
-
-### Misc
-
-- Storing data is kept to a minimal to allow building custom models for flexibility.
-  - Session persistence is also kept to a minimal and based on the Redis example provided by Shopify, but feel free to modify as required.
-- When pushing to production, add `__templates` to `.gitignore`.

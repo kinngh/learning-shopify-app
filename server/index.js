@@ -14,12 +14,6 @@ const isActiveShop = require("./middleware/isActiveShop.js");
 const applyAuthMiddleware = require("./middleware/auth.js");
 const hmacVerify = require("./middleware/hmacVerify.js");
 const userRoutes = require("./routes/index.js");
-const { appUninstallHandler } = require("./webhooks/");
-const {
-  customerDataRequest,
-  customerRedact,
-  shopRedact,
-} = require("./controllers/gdpr.js");
 const proxyRouter = require("./routes/app_proxy/index.js");
 const proxyVerification = require("./middleware/proxyVerification.js");
 
@@ -51,14 +45,9 @@ Shopify.Context.initialize({
   SESSION_STORAGE: sessionStorage,
 });
 
-//MARK:- Add handlers for webhooks here.
-
-Shopify.Webhooks.Registry.addHandlers({
-  APP_UNINSTALLED: {
-    path: "/webhooks/app_uninstalled",
-    webhookHandler: appUninstallHandler,
-  },
-});
+// All webhooks are registered here.
+// Pulled out of here for sanity
+require("./webhooks/_index.js")();
 
 const createServer = async (root = process.cwd()) => {
   const app = Express();

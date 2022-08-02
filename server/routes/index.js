@@ -22,6 +22,7 @@ userRoutes.get("/api/gql", async (req, res) => {
     data: `{
       shop {
         name
+        url
       }
     }`,
   });

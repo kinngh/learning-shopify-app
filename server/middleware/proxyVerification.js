@@ -19,7 +19,7 @@ const proxyVerification = (req, res, next) => {
   if (calculatedSignature === signature) {
     next();
   } else {
-    res.send(401);
+    res.sendStatus(401);
   }
 };
 

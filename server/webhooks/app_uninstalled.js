@@ -1,9 +1,9 @@
 const SessionModel = require("../../utils/models/SessionModel");
 const StoreModel = require("../../utils/models/StoreModel");
 
-const appUninstallHandler = async (topic, shop, webhookRequestBody) => {
+const app_uninstalled_handler = async (topic, shop, webhookRequestBody) => {
   await StoreModel.findOneAndUpdate({ shop }, { isActive: false });
   await SessionModel.deleteMany({ shop });
 };
 
-module.exports = appUninstallHandler;
+module.exports = app_uninstalled_handler;
