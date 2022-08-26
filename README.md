@@ -1,3 +1,7 @@
+# This is NOT a starter repo
+
+The starter repo is available here: [kinngh/shopify-node-express-mongodb-app](https://github.com/kinngh/shopify-node-express-mongodb-app)
+
 # Learning The Shopify Platform
 
 `Work In Progress` | The codebase I use to explore what's new on the Shopify platform and how things work.
