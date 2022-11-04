@@ -6,4 +6,4 @@ const order_transactions_create_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = order_transactions_create_handler;
+export default order_transactions_create_handler;

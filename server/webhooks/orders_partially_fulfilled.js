@@ -6,4 +6,4 @@ const orders_partially_fulfilled_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = orders_partially_fulfilled_handler;
+export default orders_partially_fulfilled_handler;

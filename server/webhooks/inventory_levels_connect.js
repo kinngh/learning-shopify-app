@@ -6,4 +6,4 @@ const inventory_levels_connect_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = inventory_levels_connect_handler;
+export default inventory_levels_connect_handler;

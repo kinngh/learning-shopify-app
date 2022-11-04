@@ -6,4 +6,4 @@ const bulk_operations_finish_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = bulk_operations_finish_handler;
+export default bulk_operations_finish_handler;

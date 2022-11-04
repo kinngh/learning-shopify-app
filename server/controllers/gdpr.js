@@ -24,6 +24,7 @@ const customerDataRequest = async (topic, shop, webhookRequestBody) => {
   // }
   try {
     console.log(`Handle ${topic} for ${shop}`);
+    console.log(webhookRequestBody);
     return { success: true };
   } catch (e) {
     console.error(e);
@@ -54,6 +55,7 @@ const customerRedact = async (topic, shop, webhookRequestBody) => {
   // }
   try {
     console.log(`Handle ${topic} for ${shop}`);
+    console.log(webhookRequestBody);
     return { success: true };
   } catch (e) {
     console.error(e);
@@ -74,6 +76,7 @@ const shopRedact = async (topic, shop, webhookRequestBody) => {
   // }
   try {
     console.log(`Handle ${topic} for ${shop}`);
+    console.log(webhookRequestBody);
     return { success: true };
   } catch (e) {
     console.error(e);
@@ -81,8 +84,4 @@ const shopRedact = async (topic, shop, webhookRequestBody) => {
   }
 };
 
-module.exports = {
-  customerDataRequest,
-  customerRedact,
-  shopRedact,
-};
+export { customerDataRequest, customerRedact, shopRedact };

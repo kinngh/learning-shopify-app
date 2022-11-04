@@ -6,4 +6,4 @@ const collection_listings_remove_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = collection_listings_remove_handler;
+export default collection_listings_remove_handler;

@@ -1,5 +1,7 @@
-const { default: Shopify } = require("@shopify/shopify-api");
-const subscriptionRoute = require("express").Router();
+import { Shopify } from "@shopify/shopify-api";
+import { Router } from "express";
+
+const subscriptionRoute = Router();
 
 // Note:
 // I would recommend creating a seaprate route for every plan you have, to avoid users meddling with React side of code.
@@ -9,7 +11,7 @@ const subscriptionRoute = require("express").Router();
 subscriptionRoute.get("/api/recurringSubscription", async (req, res) => {
   const session = await Shopify.Utils.loadCurrentSession(req, res);
   const client = new Shopify.Clients.Graphql(session.shop, session.accessToken);
-  const returnUrl = `${process.env.SHOPIFY_APP_URL}/auth/toplevel?shop=${session.shop}`;
+  const returnUrl = `${process.env.SHOPIFY_APP_URL}/auth?shop=${session.shop}`;
 
   const planName = "$10.25 plan";
   const planPrice = 10.25; //Always a decimal
@@ -44,14 +46,12 @@ subscriptionRoute.get("/api/recurringSubscription", async (req, res) => {
 `,
   });
 
-  if (response.body.errors) {
+  if (response.body.data.appSubscriptionCreate.userErrors.length > 0) {
     console.log(
       `--> Error subscribing ${session.shop} to plan:`,
-      response.body.errors
+      response.body.data.appSubscriptionCreate.userErrors
     );
-    res
-      .status(418) //Brew.
-      .send({ error: "An error occured. Please contact customer support." });
+    res.status(400).send({ error: "An error occured." });
     return;
   }
 
@@ -60,4 +60,4 @@ subscriptionRoute.get("/api/recurringSubscription", async (req, res) => {
   });
 });
 
-module.exports = subscriptionRoute;
+export default subscriptionRoute;

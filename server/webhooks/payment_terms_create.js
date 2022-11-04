@@ -6,4 +6,4 @@ const payment_terms_create_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = payment_terms_create_handler;
+export default payment_terms_create_handler;

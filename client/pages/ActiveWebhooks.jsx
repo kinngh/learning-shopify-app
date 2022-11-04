@@ -1,18 +1,12 @@
-import { navigate } from "raviger";
+import React from "react";
+import { Page, Card, DataTable } from "@shopify/polaris";
 import { useQuery, gql } from "@apollo/client";
-import React, { useEffect, useState } from "react";
-import { useAppBridge } from "@shopify/app-bridge-react";
-import { authenticatedFetch } from "@shopify/app-bridge-utils";
-import { Page, Card, DataTable, Button } from "@shopify/polaris";
+import { navigate } from "raviger";
 
 const ActiveWebhooks = () => {
-  const app = useAppBridge();
-  const fetch = authenticatedFetch(app);
-  const [shop, setShop] = useState();
-
   const getInstalledWebhooks = gql`
     {
-      webhookSubscriptions(first: 90) {
+      webhookSubscriptions(first: 10) {
         edges {
           node {
             topic
@@ -29,17 +23,6 @@ const ActiveWebhooks = () => {
   `;
 
   const { loading, error, data } = useQuery(getInstalledWebhooks);
-
-  const fetchShop = async () => {
-    console.log("Fetching shop");
-    const res = await fetch("/apps/api/gql"); //fetch instance of userLoggedInFetch(app)
-    const response = await res.json();
-    setShop(response.body.data.shop.url.replace(/https:\/\//, ""));
-  };
-
-  useEffect(() => {
-    fetchShop();
-  }, []);
 
   let rows = [];
 
@@ -62,17 +45,8 @@ const ActiveWebhooks = () => {
 
   return (
     <Page
-      fullWidth
-      subtitle={`https://${appOrigin}/`}
       title="Registered Webhooks"
       breadcrumbs={[{ content: "Home", onAction: () => navigate("/") }]}
-      primaryAction={
-        shop && (
-          <Button primary url={`https://${appOrigin}/auth?shop=${shop}`}>
-            Reauth
-          </Button>
-        )
-      }
     >
       <Card>
         <DataTable

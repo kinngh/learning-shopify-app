@@ -6,4 +6,4 @@ const product_listings_update_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = product_listings_update_handler;
+export default product_listings_update_handler;

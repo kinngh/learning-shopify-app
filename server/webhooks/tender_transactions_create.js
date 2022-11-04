@@ -6,4 +6,4 @@ const tender_transactions_create_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = tender_transactions_create_handler;
+export default tender_transactions_create_handler;

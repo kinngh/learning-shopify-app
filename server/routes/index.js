@@ -1,7 +1,8 @@
-const { default: Shopify } = require("@shopify/shopify-api");
-const userRoutes = require("express").Router();
+import { Shopify } from "@shopify/shopify-api";
+import { Router } from "express";
+import subscriptionRoute from "./recurringSubscriptions.js";
 
-const subscriptionRoute = require("./recurringSubscriptions");
+const userRoutes = Router();
 userRoutes.use(subscriptionRoute);
 
 userRoutes.get("/api", (req, res) => {
@@ -22,7 +23,6 @@ userRoutes.get("/api/gql", async (req, res) => {
     data: `{
       shop {
         name
-        url
       }
     }`,
   });
@@ -30,4 +30,4 @@ userRoutes.get("/api/gql", async (req, res) => {
   res.status(200).send(shop);
 });
 
-module.exports = userRoutes;
+export default userRoutes;

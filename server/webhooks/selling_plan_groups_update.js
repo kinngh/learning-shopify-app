@@ -6,4 +6,4 @@ const selling_plan_groups_update_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = selling_plan_groups_update_handler;
+export default selling_plan_groups_update_handler;

@@ -6,4 +6,4 @@ const app_subscriptions_approaching_capped_amount_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = app_subscriptions_approaching_capped_amount_handler;
+export default app_subscriptions_approaching_capped_amount_handler;

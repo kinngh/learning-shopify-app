@@ -6,4 +6,4 @@ const selling_plan_groups_delete_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = selling_plan_groups_delete_handler;
+export default selling_plan_groups_delete_handler;

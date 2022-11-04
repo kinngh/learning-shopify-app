@@ -6,4 +6,4 @@ const inventory_items_create_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = inventory_items_create_handler;
+export default inventory_items_create_handler;

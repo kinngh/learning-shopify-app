@@ -6,4 +6,4 @@ const collection_listings_add_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = collection_listings_add_handler;
+export default collection_listings_add_handler;

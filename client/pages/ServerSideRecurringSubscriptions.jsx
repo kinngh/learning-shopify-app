@@ -26,7 +26,7 @@ const ServerSideRecurringSubscriptions = () => {
 
   return (
     <Page
-      title="Subscribe merchant"
+      title="Subscribe Merchant"
       breadcrumbs={[{ content: "Home", onAction: () => navigate("/") }]}
     >
       <Layout>

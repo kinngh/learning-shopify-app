@@ -6,4 +6,4 @@ const fulfillment_events_create_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = fulfillment_events_create_handler;
+export default fulfillment_events_create_handler;

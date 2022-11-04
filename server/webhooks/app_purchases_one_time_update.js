@@ -6,4 +6,4 @@ const app_purchases_one_time_update_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = app_purchases_one_time_update_handler;
+export default app_purchases_one_time_update_handler;

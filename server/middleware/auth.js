@@ -1,78 +1,95 @@
-const { Shopify } = require("@shopify/shopify-api");
-const { gdprTopics } = require("@shopify/shopify-api/dist/webhooks/registry");
+import { Shopify } from "@shopify/shopify-api";
+import { gdprTopics } from "@shopify/shopify-api/dist/webhooks/registry.js";
 
-const SessionModel = require("../../utils/models/SessionModel");
-const StoreModel = require("../../utils/models/StoreModel");
-const topLevelAuthRedirect = require("../../utils/topLevelAuthRedirect");
+import authRedirect from "../../utils/authRedirect.js";
+import SessionModel from "../../utils/models/SessionModel.js";
+import StoreModel from "../../utils/models/StoreModel.js";
 
-const applyAuthMiddleware = (app) => {
+const authMiddleware = (app) => {
   app.get("/auth", async (req, res) => {
-    if (!req.signedCookies[app.get("top-level-oauth-cookie")]) {
-      return res.redirect(`/auth/toplevel?shop=${req.query.shop}`);
+    try {
+      await authRedirect(req, res);
+    } catch (e) {
+      const { shop } = req.query;
+      switch (true) {
+        case e instanceof Shopify.Errors.InvalidOAuthError:
+          res.status(400).send(e.message);
+          break;
+        case e instanceof Shopify.Errors.CookieNotFound:
+        case e instanceof Shopify.Errors.SessionNotFound:
+          // This is likely because the OAuth session cookie expired before the merchant approved the request
+          // Delete sessions and restart installation
+          await StoreModel.findOneAndUpdate({ shop }, { isActive: false });
+          await SessionModel.deleteMany({ shop });
+          res.redirect(`/auth?shop=${shop}`);
+          break;
+        default:
+          res.status(500).send(e.message);
+          console.error(`---> Error at /auth`, e.message);
+          break;
+      }
     }
-
-    const redirectUrl = await Shopify.Auth.beginAuth(
-      req,
-      res,
-      req.query.shop,
-      "/auth/tokens",
-      false //offline token
-    );
-    res.redirect(redirectUrl);
   });
 
   app.get("/auth/tokens", async (req, res) => {
-    const session = await Shopify.Auth.validateAuthCallback(
-      req,
-      res,
-      req.query
-    );
+    try {
+      const session = await Shopify.Auth.validateAuthCallback(
+        req,
+        res,
+        req.query
+      );
 
-    const { shop, accessToken } = session;
+      const { shop, accessToken } = session;
 
-    const webhookRegistrar = await Shopify.Webhooks.Registry.registerAll({
-      shop,
-      accessToken,
-    });
+      console.log("--> Registering all the webhooks. This will take a while");
+      const webhookRegistrar = await Shopify.Webhooks.Registry.registerAll({
+        shop,
+        accessToken,
+      });
 
-    Object.entries(webhookRegistrar).map(([topic, response]) => {
-      if (!response.success && !gdprTopics.includes(topic)) {
-        console.error(
-          `--> Failed to register ${topic} for ${shop}.`,
-          response.result.errors
-        );
-      } else if (!gdprTopics.includes(topic)) {
-        console.log(`--> Registered ${topic} for ${shop}`);
+      console.log("--> All webhooks registered.");
+
+      Object.entries(webhookRegistrar).map(([topic, response]) => {
+        if (!response.success && !gdprTopics.includes(topic)) {
+          console.error(
+            `--> Failed to register ${topic} for ${shop}.`,
+            response.result.errors
+          );
+        } else if (!gdprTopics.includes(topic)) {
+          console.log(`--> Registered ${topic} for ${shop}`);
+        }
+      });
+
+      const redirectUrl = await Shopify.Auth.beginAuth(
+        req,
+        res,
+        req.query.shop,
+        "/auth/callback",
+        true //online tokens
+      );
+
+      return res.redirect(redirectUrl);
+    } catch (e) {
+      const { shop } = req.query;
+      switch (true) {
+        case e instanceof Shopify.Errors.InvalidOAuthError:
+          res.status(400);
+          res.send(e.message);
+          break;
+        case e instanceof Shopify.Errors.CookieNotFound:
+        case e instanceof Shopify.Errors.SessionNotFound:
+          // This is likely because the OAuth session cookie expired before the merchant approved the request
+          // Delete sessions and restart installation
+          await StoreModel.findOneAndUpdate({ shop }, { isActive: false });
+          await SessionModel.deleteMany({ shop });
+          res.redirect(`/auth?shop=${shop}`);
+          break;
+        default:
+          res.status(500).send(e.message);
+          console.error(`---> Error at /auth/tokens`, e.message);
+          break;
       }
-    });
-
-    const redirectUrl = await Shopify.Auth.beginAuth(
-      req,
-      res,
-      req.query.shop,
-      "/auth/callback",
-      true //online tokens
-    );
-
-    res.redirect(redirectUrl);
-  });
-
-  app.get("/auth/toplevel", (req, res) => {
-    res.cookie(app.get("top-level-oauth-cookie"), "1", {
-      signed: true,
-      httpOnly: true,
-      sameSite: "strict",
-    });
-
-    res.set("Content-Type", "text/html");
-
-    res.send(
-      topLevelAuthRedirect({
-        apiKey: Shopify.Context.API_KEY,
-        hostName: Shopify.Context.HOST_NAME,
-        shop: req.query.shop,
-      })
-    );
+    }
   });
 
   app.get("/auth/callback", async (req, res) => {
@@ -106,12 +123,12 @@ const applyAuthMiddleware = (app) => {
           res.redirect(`/auth?shop=${shop}`);
           break;
         default:
-          res.status(500);
-          res.send(e.message);
+          res.status(500).send(e.message);
+          console.error(`---> Error at /auth/callback`, e.message);
           break;
       }
     }
   });
 };
 
-module.exports = applyAuthMiddleware;
+export default authMiddleware;

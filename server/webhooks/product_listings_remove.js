@@ -6,4 +6,4 @@ const product_listings_remove_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = product_listings_remove_handler;
+export default product_listings_remove_handler;

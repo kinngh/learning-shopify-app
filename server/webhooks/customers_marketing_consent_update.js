@@ -6,4 +6,4 @@ const customers_marketing_consent_update_handler = async (
   console.log(topic);
   console.log(webhookRequestBody);
 };
-module.exports = customers_marketing_consent_update_handler;
+export default customers_marketing_consent_update_handler;
